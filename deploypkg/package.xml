@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>VisitorLogDetailPage</members>
+        <name>ApexPage</name>
+    </types>
+    <types>
+        <members>VisitorTriggerHandler</members>
+        <members>VisitorTriggerHandlerTest</members>
+        <members>VisitorLogTriggerHandler</members>
+        <members>VisitorLogTriggerHandlerTest</members>
+        <members>VisitorLogDetailPageController</members>
+        <members>VisitorLogDetailPageControllerTest</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>VisitorTrigger</members>
+        <members>VisitorLogTrigger</members>
+        <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>New_Visitor</members>
+        <members>Visitor_Log_Id</members>
+        <name>CustomLabel</name>
+    </types>
+    <version>43.0</version>
+</Package>

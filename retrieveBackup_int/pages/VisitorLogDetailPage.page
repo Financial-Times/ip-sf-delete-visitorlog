@@ -1,0 +1,102 @@
+<!-- Description: Visualforce Page to display the detail page for the Visitor Log
+* Change Log - Latest Change
+*
+* Date        Author          Change Description
+* ------------------------------------------------------------------------------------
+* 24/02/2015  Tammy Mistry     Created Page
+
+-->
+
+<apex:page standardController="Visitor_Log__c" extensions="VisitorLogDetailPageController">
+    <script>        
+        //Selects or deselects all of the records when the select all checkbox is clicked
+        function selectAll(clickedCheckBox,selectAllName,selectSingleName)
+        {
+            var i = 0;
+            var rowName = clickedCheckBox.id.substring(0, clickedCheckBox.id.indexOf(selectAllName));
+            while (document.getElementById(rowName + i + ':' + selectSingleName) != null)
+            {
+                document.getElementById(rowName + i + ':' + selectSingleName).checked = clickedCheckBox.checked;
+                i++;
+            }
+        }
+        
+        //Manages the select all check box when one of the indvidual rows are clicked
+        function selectOne(clickedCheckBox,selectAllName,selectSingleName)
+        {
+            var i = 0;
+            var index = 0;
+            while (index < clickedCheckBox.id.lastIndexOf(':')-1)
+            {
+               index += clickedCheckBox.id.substring(index).indexOf(':');
+               index++;
+            }
+            
+            var rowName = clickedCheckBox.id.substring(0,index);
+                             
+            var tableName = rowName + selectAllName;
+            while (document.getElementById(rowName + i + ':Reference') != null)
+            {
+                if(rowName.indexOf('ListTable') > -1)
+                {
+                    document.getElementById(rowName + selectAllName).checked = 
+                        document.getElementById(rowName + selectAllName).checked
+                        && clickedCheckBox.checked;
+                }
+                i++;
+            }
+        }
+    </script>  
+    <apex:form id="customButtons">
+        <div align="center">  
+            <apex:commandButton action="{!Edit}" value="Edit" />
+            <apex:commandButton action="{!Delete}" value="Delete" />
+            <apex:commandButton action="{!sendArrivalEmail}" value="Send Arrival Email" onclick="window.alert('The Arrival Email has been successfully sent.')"
+                                rendered="{!$Permission.Visitor_Logging_Administrator}" reRender="customButtons" />
+            <apex:commandButton action="{!sendDepartureEmail}" value="Send Departure Email" onclick="window.alert('The Departure Email has been successfully sent.')"
+                                rendered="{!$Permission.Visitor_Logging_Administrator}" reRender="customButtons" />
+        </div>
+        <br/>
+        <div align="center">
+            <apex:outputText style="font-weight:bold;font-size:13px;" value="If this Visitor Log has multiple guests, please add in additional visitor details 
+                                                                             by clicking the 'New Visitor' button at the bottom of the page." />        
+        </div>
+    </apex:form>
+    <apex:detail />
+    <apex:form >
+    <apex:pageBlock title="Visitors" tabStyle="Visitor__c"> 
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton action="{!newVisitor}" value="New Visitor" />
+            <apex:commandButton action="{!visitorsArrived}" value="Visitors Arrived" rendered="{!$Permission.Visitor_Logging_Administrator}" />
+            <apex:commandButton action="{!visitorsDeparted}" value="Visitors Departed" rendered="{!$Permission.Visitor_Logging_Administrator}" />
+        </apex:pageBlockButtons>
+        <apex:pageBlockTable value="{!visitorList}" var="v" rendered="{!visitorList.size > 0}" >  
+            <apex:column id="Select" rendered="{!$Permission.Visitor_Logging_Administrator}">
+            <apex:facet name="header">
+                <apex:inputCheckbox id="allVisitorsSelected" value="{!allVisitorsSelected}"
+                                    onclick="selectAll(this,'allVisitorsSelected','visitorSelected')"
+                                    rendered="{!$Permission.Visitor_Logging_Administrator}" selected="false"/>
+            </apex:facet>
+            <apex:inputCheckbox id="visitorSelected" value="{!v.selected}"
+                                onclick="selectOne(this,'allVisitorsSelected','visitorSelected')"
+                                rendered="{!$Permission.Visitor_Logging_Administrator}" selected="false" /> 
+            </apex:column>
+            <apex:column >
+                <apex:outputText >
+                    <a style="color:blue;" href="/{!v.vis.Id}/e?saveURL=/apex/VisitorLogDetailPage?id={!v.vis.Visitor_Log__r.Id}
+                                                 &retURL=/apex/VisitorLogDetailPage?id={!v.vis.Visitor_Log__r.Id}">Edit</a>
+                </apex:outputText>
+            </apex:column>
+            <apex:column headerValue="Visitor Number">
+                <apex:commandLink value="{!v.vis.Name}" action="/{!v.vis.Id}"/>
+            </apex:column>
+            <apex:column value="{!v.vis.Visitor_Name__c}" />
+            <apex:column value="{!v.vis.Badge_Number__c}" />
+            <apex:column value="{!v.vis.Badge_Type__c}" />
+            <apex:column value="{!v.vis.Time_Arrived__c}" />
+            <apex:column value="{!v.vis.Time_Departed__c}" />
+            <apex:column value="{!v.vis.No_Show__c}" />
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

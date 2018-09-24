@@ -1,6 +1,9 @@
-# Ant Migration Tool
+# ip-sf-delete-visitorlog
 
-## Steps
+### Release Doc
+https://docs.google.com/spreadsheets/d/1Heg5Xxry-0NLQPgdsPC8Pr7oDOt6I5E0fzGIhNrQCLE/edit#gid=1
+
+### Steps
 Make sure build.properties has the correct credentials to the correct salesforce enviroment.
 
 Run ant tasks as below

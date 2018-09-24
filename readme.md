@@ -1,4 +1,5 @@
 # ip-sf-delete-visitorlog
+This is the ant package used to delete the apex code associated to Editorial Equipment App in Salesforce Global
 
 ### Release Doc
 https://docs.google.com/spreadsheets/d/1Heg5Xxry-0NLQPgdsPC8Pr7oDOt6I5E0fzGIhNrQCLE/edit#gid=1
